@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inarich Store — Jirai Kei Review System</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts: Cinzel, Noto Sans Thai & Mali (Cute Thai font) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Mali:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        jirai: {
+          bg: '#fce7f0',
+          card: '#fff5f8',
+          border: '#1c191a',
+          pink: '#f8c8dc',
+          pinkDeep: '#e88fb4',
+          black: '#181516',
+          subtext: '#6e525d'
+        }
+      },
+      fontFamily: {
+        cinzel: ['Cinzel', 'serif'],
+        cute: ['Mali', 'Noto Sans Thai', 'sans-serif'],
+        sans: ['Noto Sans Thai', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+/* Jirai Kei Pink Diamond Heart Lattice Background (เหมือนรูปที่ 2) */
+body {
+  background-color: #fbe6ef;
+  background-image: 
+    radial-gradient(#261e21 1.5px, transparent 1.5px),
+    radial-gradient(#261e21 1.5px, transparent 1.5px),
+    linear-gradient(45deg, transparent 48.5%, rgba(38, 30, 33, 0.25) 49.5%, rgba(38, 30, 33, 0.25) 50.5%, transparent 51.5%),
+    linear-gradient(-45deg, transparent 48.5%, rgba(38, 30, 33, 0.25) 49.5%, rgba(38, 30, 33, 0.25) 50.5%, transparent 51.5%);
+  background-size: 36px 36px;
+  background-position: 0 0, 18px 18px, 0 0, 0 0;
+  color: #1f191b;
+  font-family: 'Noto Sans Thai', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Top & Bottom Jirai Lace & Cross Trim (เหมือนรูปที่ 1) */
+.jirai-trim-top {
+  height: 28px;
+  width: 100%;
+  background: 
+    repeating-linear-gradient(90deg, #181516 0px, #181516 24px, #2b2426 24px, #2b2426 26px);
+  border-bottom: 3px dotted #f8c8dc;
+  box-shadow: 0 4px 10px rgba(24, 21, 22, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+.jirai-trim-top::after {
+  content: "✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕  ✕";
+  color: rgba(255, 228, 239, 0.45);
+  font-size: 11px;
+  letter-spacing: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  white-space: nowrap;
+}
+
+/* Jirai Kei Card Frame with Lace & Ribbon Accent */
+.jirai-frame {
+  position: relative;
+  background-color: #fff6f9;
+  background-image: radial-gradient(rgba(38, 30, 33, 0.16) 1px, transparent 1px);
+  background-size: 14px 14px;
+  border: 2px solid #1c191a;
+  box-shadow: 0 6px 0 #1c191a, 0 12px 24px -8px rgba(28, 25, 26, 0.25);
+}
+
+.jirai-frame-dashed {
+  border: 2px dashed #1c191a;
+  box-shadow: 0 5px 0 #f4b6d0, 0 10px 20px rgba(28, 25, 26, 0.15);
+}
+
+/* Jirai Lace Top Strip inside Card */
+.jirai-lace-bar {
+  height: 10px;
+  background-image: radial-gradient(circle at 8px 0px, #1c191a 6px, transparent 7px);
+  background-size: 16px 10px;
+  background-repeat: repeat-x;
+  opacity: 0.85;
+}
+
+/* Jirai Black & Pink Ribbon Button */
+.jirai-btn-black {
+  background: linear-gradient(180deg, #2d2528 0%, #161213 100%);
+  border: 1.5px solid #161213;
+  color: #ffe6f0;
+  box-shadow: 0 3px 0 #f2a7c6;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.jirai-btn-black:hover {
+  background: linear-gradient(180deg, #3d3136 0%, #1f191b 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 0 #e682ad, 0 0 12px rgba(244, 166, 200, 0.6);
+  transform: translateY(-1px);
+}
+.jirai-btn-black:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #e682ad;
+}
+
+/* Cute Float effect */
+@keyframes jiraiFloat {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-4px) rotate(1.5deg); }
+}
+.animate-jirai-float {
+  animation: jiraiFloat 3.5s ease-in-out infinite;
+}
+
+/* Falling Hearts & Ribbons Animation */
+@keyframes fallAndSway {
+  0% {
+    transform: translateY(-20px) rotate(0deg) translateX(0px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  85% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(105vh) rotate(360deg) translateX(25px);
+    opacity: 0;
+  }
+}
+.falling-cross {
+  position: fixed;
+  top: -30px;
+  color: #1c191a;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  animation: fallAndSway linear infinite;
+  text-shadow: 0 0 4px rgba(255, 192, 219, 0.9);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #fce7f0;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c191a;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d9739e;
+}
+</style>
+</head>
+<body class="pb-8">
+
+<!-- Top Jirai Lace & Cross Border -->
+<div class="jirai-trim-top mb-4"></div>
+
+<!-- MAIN CONTAINER (Mobile-First Layout: Optimized for small screens) -->
+<div class="w-full max-w-xl mx-auto px-3 sm:px-6 space-y-4 sm:space-y-5 relative z-10">
+
+  <!-- HEADER TOP BAR: Web Title & Est -->
+  <div class="flex items-center justify-between text-[11px] sm:text-xs text-[#1c191a] font-cinzel font-bold tracking-widest px-2 py-1 bg-white/80 backdrop-blur-xs rounded-full border border-[#1c191a]">
+    <span>୨୧ INARICH STORE ୨୧</span>
+    <span>♡ Est. MMXXVI ♡</span>
+  </div>
+
+  <!-- SECTION 1: Shop Header Card -->
+  <div class="jirai-frame jirai-frame-dashed rounded-2xl overflow-hidden">
+    <!-- Top Black Lace Trim -->
+    <div class="jirai-lace-bar"></div>
+
+    <!-- Cute Black Ribbon SVG Decoration (Top Right like Image 1) -->
+    <div class="absolute top-1.5 right-2 pointer-events-none opacity-90 drop-shadow-sm">
+      <svg width="42" height="36" viewBox="0 0 64 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 24C24 12 8 8 6 18C4 28 20 30 32 26Z" fill="#1c191a" stroke="#f8c8dc" stroke-width="1.5"/>
+        <path d="M32 24C40 12 56 8 58 18C60 28 44 30 32 26Z" fill="#1c191a" stroke="#f8c8dc" stroke-width="1.5"/>
+        <path d="M29 26L14 50L24 52L32 30Z" fill="#1c191a" stroke="#f8c8dc" stroke-width="1.2"/>
+        <path d="M35 26L50 50L40 52L32 30Z" fill="#1c191a" stroke="#f8c8dc" stroke-width="1.2"/>
+        <rect x="27" y="20" width="10" height="10" rx="3" fill="#1c191a" stroke="#f8c8dc" stroke-width="1.5"/>
+        <circle cx="32" cy="25" r="2" fill="#f8c8dc"/>
+      </svg>
+    </div>
+
+    <div class="p-3.5 sm:p-5">
+      <div class="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-3">
+        <div class="flex items-center space-x-3 sm:space-x-4 w-full">
+          <!-- Jirai Logo Avatar -->
+          <div class="relative group shrink-0">
+            <div class="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#fce7f0] border-2 border-[#1c191a] flex items-center justify-center shadow-md relative overflow-hidden animate-jirai-float">
+              <span class="text-[#1c191a] text-2xl sm:text-3xl">🎀</span>
+            </div>
+            <span class="absolute -bottom-1 -right-1 bg-[#1c191a] text-[#f8c8dc] border border-[#f8c8dc] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-cinzel">🖤</span>
+          </div>
+
+          <!-- Shop Details -->
+          <div class="min-w-0 flex-1 pr-6 xs:pr-0">
+            <div class="flex items-center justify-between xs:justify-start space-x-2">
+              <h1 class="text-lg sm:text-2xl font-bold font-cinzel text-[#1c191a] tracking-wider truncate">Inarich Store</h1>
+              <button onclick="toggleAdminModal(true)" class="xs:hidden jirai-btn-black text-[10px] px-2.5 py-1.5 rounded-full flex items-center space-x-1 shrink-0">
+                <i class="fa-solid fa-heart text-[10px] text-[#f8c8dc]"></i>
+                <span class="font-cute font-semibold">แอดมิน</span>
+              </button>
+            </div>
+            <p id="shopDescriptionText" class="text-[11px] sm:text-xs text-[#593e49] mt-0.5 font-medium truncate">ร้านค้าสไตล์ Jirai Kei & Cute Dark Collection</p>
+
+            <!-- Badges / Tags -->
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              <span id="shopStatusBadge" class="inline-flex items-center text-[9px] sm:text-[10px] bg-[#1c191a] text-[#ffe6f0] border border-[#1c191a] px-2.5 py-0.5 rounded-full font-cinzel">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#f49ac1] inline-block mr-1.5 animate-pulse"></span>
+                status: sweet dark open!
+              </span>
+              <span id="shopTagsBadge" class="text-[9px] sm:text-[10px] bg-[#fad4e4] text-[#1c191a] border border-[#1c191a] px-2.5 py-0.5 rounded-full font-cinzel font-semibold">
+                jirai kei / ribbon / cute
+              </span>
+            </div>
+
+            <!-- Contact Us Bar (Customer Front-end) -->
+            <div class="flex items-center space-x-2 mt-2.5 pt-2 border-t border-dashed border-[#1c191a]/30">
+              <span class="text-[10px] text-[#1c191a] font-cinzel font-bold tracking-wider">CONTACT:</span>
+              <div id="custContactContainer" class="flex flex-wrap items-center gap-1.5">
+                <!-- Dynamic Contact Icons Rendered via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Button (Right Corner on Desktop) -->
+        <button onclick="toggleAdminModal(true)" class="hidden xs:flex jirai-btn-black text-xs px-3.5 py-2 rounded-full items-center space-x-1.5 shrink-0">
+          <i class="fa-solid fa-heart text-[11px] text-[#f8c8dc]"></i>
+          <span class="font-cute font-semibold text-[11px]">แอดมิน</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Aesthetic Jirai Banner Frame -->
+  <div id="bannerContainer" class="jirai-frame rounded-2xl p-2 sm:p-2.5 relative overflow-hidden group">
+    <div class="w-full aspect-[1122/495] rounded-xl overflow-hidden border-2 border-[#1c191a] relative bg-[#fad4e4] shadow-inner transition duration-300">
+      <img id="shopBannerImg"
+        src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop"
+        alt="Inarich Jirai Kei Aesthetic Banner"
+        class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
+        onerror="this.onerror=null; this.src='https://placehold.co/1122x495/fce7f0/1c191a?text=Inarich+Jirai+Kei+Banner';" />
+    </div>
+  </div>
+
+  <!-- SECTION 3: Rating Summary Card (STANDALONE CARD 1) -->
+  <div class="jirai-frame jirai-frame-dashed rounded-2xl p-3.5 sm:p-5 relative overflow-hidden">
+    <!-- Jirai corner icons -->
+    <span class="absolute top-1.5 left-2.5 text-[10px] text-[#1c191a]">♡</span>
+    <span class="absolute top-1.5 right-2.5 text-[10px] text-[#1c191a]">♡</span>
+    <span class="absolute bottom-1.5 left-2.5 text-[10px] text-[#1c191a]">✕</span>
+    <span class="absolute bottom-1.5 right-2.5 text-[10px] text-[#1c191a]">✕</span>
+
+    <div class="flex items-center justify-between gap-4">
+      <!-- Left Group: Heart/Skull Icon + Rating Stack -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-14 h-14 rounded-2xl bg-[#1c191a] border-2 border-[#f49ac1] flex items-center justify-center text-[#f8c8dc] shrink-0 shadow-md">
+          <i class="fa-solid fa-heart-pulse text-2xl"></i>
+        </div>
+
+        <!-- Rating Content Stack -->
+        <div class="flex flex-col justify-center space-y-1">
+          <!-- 1. Rating Score Number & / 5.0 -->
+          <div class="flex items-baseline space-x-1.5 leading-none">
+            <span id="avgRatingScore" class="text-2xl sm:text-3xl font-bold font-cinzel text-[#1c191a]">4.7</span>
+            <span class="text-xs text-[#6e525d] font-cinzel font-bold">/ 5.0</span>
+          </div>
+
+          <!-- 2. Stars Rating -->
+          <div id="avgStars" class="flex items-center space-x-1 text-[#1c191a] text-xs">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star-half-stroke"></i>
+          </div>
+
+          <!-- 3. Review Count Text Below Stars -->
+          <div id="totalReviewsCount" class="text-[11px] sm:text-xs text-[#593e49] font-cute tracking-wide">
+            จาก <strong class="text-[#1c191a] font-bold">3</strong> รีวิวทั้งหมด
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Group: Write Review Button -->
+      <div class="flex items-center shrink-0">
+        <button onclick="toggleReviewModal(true)" class="jirai-btn-black group px-4 sm:px-5 py-2.5 rounded-full flex items-center space-x-2 text-xs sm:text-sm font-cute active:scale-95 transition">
+          <i class="fa-solid fa-pen-nib text-[#f8c8dc] transition-transform group-hover:rotate-12 text-xs"></i>
+          <span class="font-bold tracking-wider whitespace-nowrap text-[#ffe6f0]">เขียนรีวิว</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Customer Reviews List Card (STANDALONE CARD 2) -->
+  <div class="jirai-frame rounded-2xl overflow-hidden">
+    <div class="bg-[#1c191a] text-[#ffe6f0] px-4 py-2.5 flex items-center justify-between border-b-2 border-[#f49ac1]">
+      <h3 class="text-xs sm:text-sm font-bold font-cute flex items-center space-x-2">
+        <span>୨୧ ความคิดเห็นจากลูกค้าทั้งหมด ୨୧</span>
+      </h3>
+      <span class="text-[10px] text-[#f8c8dc] font-cinzel tracking-wider">FEEDBACK ♡</span>
+    </div>
+
+    <div class="p-4 sm:p-5">
+      <!-- Review Items List Container -->
+      <div id="publicReviewList" class="space-y-3.5">
+        <!-- Dynamically rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODALS (Optimized Touch Targets for Mobile) -->
+
+<!-- 1. CUSTOMER WRITE REVIEW MODAL -->
+<div id="reviewModal" class="fixed inset-0 bg-[#1c191a]/75 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+  <div class="jirai-frame rounded-t-3xl sm:rounded-2xl max-w-md w-full p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto">
+    <button onclick="toggleReviewModal(false)" class="absolute top-4 right-4 w-7 h-7 rounded-full bg-[#1c191a] text-[#f8c8dc] flex items-center justify-center hover:scale-105 transition">
+      <i class="fa-solid fa-xmark text-sm"></i>
+    </button>
+
+    <h3 class="text-sm sm:text-base font-bold font-cute text-[#1c191a] mb-0.5 flex items-center space-x-2">
+      <span>୨୧ เขียนรีวิวของคุณ ୨୧</span>
+    </h3>
+    <p class="text-[11px] sm:text-xs text-[#6e525d] mb-4 font-cute">แบ่งปันความประทับใจต่อ Inarich Store ♡</p>
+
+    <form onsubmit="handleCustomerSubmitReview(event)" class="space-y-3.5">
+      <div>
+        <label class="block text-xs font-cute font-bold text-[#1c191a] mb-1">ชื่อผู้รีวิว</label>
+        <input type="text" id="custName" required placeholder="เช่น คุณลูกค้าน่ารัก..."
+          class="w-full bg-white border-2 border-[#1c191a] rounded-xl p-3 text-xs text-[#1c191a] focus:outline-none focus:ring-2 focus:ring-[#f49ac1]">
+      </div>
+      <div>
+        <label class="block text-xs font-cute font-bold text-[#1c191a] mb-1">ให้คะแนนความประทับใจ</label>
+        <div id="starRatingPicker" class="flex space-x-3 text-xl text-[#1c191a] cursor-pointer py-1">
+          <i class="fa-solid fa-star p-1" onclick="setRating(1)"></i>
+          <i class="fa-solid fa-star p-1" onclick="setRating(2)"></i>
+          <i class="fa-solid fa-star p-1" onclick="setRating(3)"></i>
+          <i class="fa-solid fa-star p-1" onclick="setRating(4)"></i>
+          <i class="fa-solid fa-star p-1" onclick="setRating(5)"></i>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-cute font-bold text-[#1c191a] mb-1">ข้อความรีวิว</label>
+        <textarea id="custContent" rows="3" required placeholder="พิมพ์ข้อความรีวิวตรงนี้..."
+          class="w-full bg-white border-2 border-[#1c191a] rounded-xl p-3 text-xs text-[#1c191a] focus:outline-none focus:ring-2 focus:ring-[#f49ac1]"></textarea>
+      </div>
+      <div class="pt-2 flex justify-end space-x-2">
+        <button type="button" onclick="toggleReviewModal(false)" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-full text-xs text-[#1c191a] bg-white border-2 border-[#1c191a] font-cute font-bold">ยกเลิก</button>
+        <button type="submit" class="flex-1 sm:flex-initial jirai-btn-black px-5 py-2.5 rounded-full text-xs font-cute font-bold">ส่งรีวิว ♡</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 2. ADMIN CONTROL MODAL -->
+<div id="adminModal" class="fixed inset-0 bg-[#1c191a]/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+  <div class="jirai-frame rounded-t-3xl sm:rounded-2xl max-w-2xl w-full p-4 sm:p-6 relative max-h-[92vh] flex flex-col">
+    <div class="flex items-center justify-between pb-3 border-b-2 border-dashed border-[#1c191a]/40">
+      <div>
+        <h3 class="text-xs sm:text-base font-bold font-cute text-[#1c191a] flex items-center space-x-1.5">
+          <i class="fa-solid fa-crown text-[#d95b96] text-xs sm:text-sm"></i>
+          <span>แผงจัดการหลังบ้าน (Admin Console)</span>
+        </h3>
+        <p class="text-[10px] sm:text-xs text-[#6e525d] mt-0.5">จัดการรูปภาพ และสถานะรีวิว (อนุมัติ / ซ่อน / ลบ)</p>
+      </div>
+      <button onclick="toggleAdminModal(false)" class="w-7 h-7 rounded-full bg-[#1c191a] text-[#f8c8dc] flex items-center justify-center hover:scale-105 transition">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Scrollable Content Area -->
+    <div class="overflow-y-auto flex-1 my-4 space-y-5 pr-1">
+
+      <!-- SECTION: Manage Shop Images & Info -->
+      <div class="bg-white/90 border-2 border-[#1c191a] rounded-xl p-4 space-y-4">
+        <h4 class="text-xs font-bold font-cute text-[#1c191a] flex items-center space-x-1.5 border-b border-dashed border-[#1c191a]/30 pb-2">
+          <i class="fa-solid fa-image text-[#d95b96]"></i>
+          <span>จัดการรูปภาพและรายละเอียดร้านค้า</span>
+        </h4>
+
+        <!-- Edit Shop Info Form -->
+        <div class="space-y-2 border-b border-dashed border-[#1c191a]/30 pb-3">
+          <label class="block text-xs font-cute font-bold text-[#1c191a]">แก้ไขข้อมูลรายละเอียดร้าน</label>
+          <div class="space-y-2">
+            <div>
+              <span class="text-[10px] text-[#6e525d] font-bold">คำอธิบายร้านค้า:</span>
+              <input type="text" id="adminDescInput" placeholder="คำอธิบายร้านค้า..."
+                class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <span class="text-[10px] text-[#6e525d] font-bold">ข้อความป้ายสถานะ (Status):</span>
+                <input type="text" id="adminStatusInput" placeholder="status: sweet dark open!"
+                  class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+              </div>
+              <div>
+                <span class="text-[10px] text-[#6e525d] font-bold">ข้อความป้ายแท็ก (Tags):</span>
+                <input type="text" id="adminTagsInput" placeholder="jirai kei / ribbon / cute"
+                  class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+              </div>
+            </div>
+            <button onclick="updateShopInfoFromAdmin()" class="w-full jirai-btn-black text-xs py-2 rounded-full font-cute font-bold">
+              บันทึกการแก้ไขข้อมูลร้านค้า
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Logo Setting -->
+          <div class="space-y-2">
+            <label class="block text-xs text-[#1c191a] font-cute font-bold">เปลี่ยนรูปโลโก้ร้าน</label>
+            <div class="space-y-2">
+              <label class="w-full flex items-center justify-center space-x-2 bg-[#fce7f0] hover:bg-[#fad4e4] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] font-bold cursor-pointer transition">
+                <i class="fa-solid fa-upload"></i>
+                <span>อัปโหลดรูปโลโก้จากเครื่อง</span>
+                <input type="file" id="adminLogoFileInput" accept="image/*" onchange="handleLogoFileUpload(event)" class="hidden">
+              </label>
+              <div class="flex space-x-2">
+                <input type="text" id="adminLogoInput" placeholder="หรือวาง URL รูปโลโก้..."
+                  class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+                <button onclick="updateLogoFromAdmin()" class="jirai-btn-black text-xs px-3 py-1.5 rounded-lg font-cute whitespace-nowrap">บันทึก</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner Setting -->
+          <div class="space-y-2">
+            <label class="block text-xs text-[#1c191a] font-cute font-bold">จัดการรูปแบรนเนอร์</label>
+            <div id="adminBannerControl">
+              <!-- Banner buttons dynamically rendered -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Manage Contact Us Links -->
+      <div class="bg-white/90 border-2 border-[#1c191a] rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold font-cute text-[#1c191a] flex items-center justify-between border-b border-dashed border-[#1c191a]/30 pb-2">
+          <span class="flex items-center space-x-1.5">
+            <i class="fa-solid fa-address-book text-[#d95b96]"></i>
+            <span>จัดการช่องทางติดต่อ (Contact Us)</span>
+          </span>
+        </h4>
+
+        <!-- Dynamic List of Admin Contact Inputs -->
+        <div id="adminContactList" class="space-y-2.5">
+          <!-- Dynamic Contact Rows Rendered via JS -->
+        </div>
+
+        <!-- Add New Custom Contact Channel Form -->
+        <div class="pt-2 border-t border-dashed border-[#1c191a]/30">
+          <label class="block text-[11px] text-[#1c191a] font-cute font-bold mb-1">เพิ่มช่องทางติดต่อใหม่:</label>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <select id="newContactPlatform" class="bg-[#fff6f9] border border-[#1c191a] text-[#1c191a] text-xs rounded-lg p-2 focus:outline-none font-cute">
+              <option value="facebook">Facebook</option>
+              <option value="line">Line</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="twitter">X (Twitter)</option>
+              <option value="shopee">Shopee</option>
+              <option value="lazada">Lazada</option>
+              <option value="youtube">YouTube</option>
+              <option value="phone">เบอร์โทรศัพท์ (Phone)</option>
+              <option value="email">อีเมล (Email)</option>
+              <option value="telegram">Telegram</option>
+              <option value="discord">Discord</option>
+              <option value="other">อื่นๆ (Link)</option>
+            </select>
+            <input type="text" id="newContactUrl" placeholder="ใส่ลิงก์ หรือข้อมูลติดต่อ..."
+              class="flex-1 bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+            <button onclick="addContactChannel()" class="jirai-btn-black text-xs px-3 py-2 rounded-lg font-cute whitespace-nowrap">
+              + เพิ่มช่องทาง
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Manage Reviews List -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold font-cute text-[#1c191a] flex items-center space-x-1.5">
+          <i class="fa-solid fa-list-check text-[#d95b96]"></i>
+          <span>รายการรีวิวทั้งหมด</span>
+        </h4>
+        <div id="adminReviewList" class="space-y-3">
+          <!-- Admin Items dynamically rendered -->
+        </div>
+      </div>
+
+      <!-- SECTION: Change Admin Password -->
+      <div class="bg-white/90 border-2 border-[#1c191a] rounded-xl p-4 space-y-3">
+        <h4 class="text-xs font-bold font-cute text-[#1c191a] flex items-center space-x-1.5 border-b border-dashed border-[#1c191a]/30 pb-2">
+          <i class="fa-solid fa-key text-[#d95b96]"></i>
+          <span>เปลี่ยนรหัสผ่านแอดมิน (Change Admin Password)</span>
+        </h4>
+        <div class="space-y-2.5">
+          <div>
+            <label class="block text-[11px] text-[#1c191a] font-bold mb-1">รหัสผ่านปัจจุบัน (Current Password):</label>
+            <input type="password" id="adminCurrentPass" placeholder="กรอกรหัสผ่านปัจจุบัน..."
+              class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] text-[#1c191a] font-bold mb-1">รหัสผ่านใหม่ (New Password):</label>
+            <input type="password" id="adminNewPass" placeholder="กรอกรหัสผ่านใหม่..."
+              class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] text-[#1c191a] font-bold mb-1">ยืนยันรหัสผ่านใหม่ (Confirm New Password):</label>
+            <input type="password" id="adminConfirmPass" placeholder="ยืนยันรหัสผ่านใหม่..."
+              class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+          </div>
+          <button onclick="handleChangeAdminPassword()" class="w-full jirai-btn-black text-xs py-2 rounded-full font-cute font-bold">
+            อัปเดตรหัสผ่านแอดมิน
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pt-3 border-t-2 border-dashed border-[#1c191a]/40 flex justify-between items-center text-xs text-[#593e49] font-cute">
+      <span>สิทธิ์ผู้ดูแลระบบ: Inarich Admin ♡</span>
+      <button onclick="toggleAdminModal(false)" class="jirai-btn-black px-4 py-2 rounded-full text-xs font-cute font-bold">ปิดหน้าต่าง</button>
+    </div>
+  </div>
+</div>
+
+<!-- JAVASCRIPT LOGIC -->
+<script>
+// Initial Demo State Data
+let bannerUrl = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop";
+let logoIconText = "🎀";
+let isLogoCustomImage = false;
+
+// Shop Info State
+let shopDesc = "ร้านค้าสไตล์ Jirai Kei & Cute Dark Collection";
+let shopStatusText = "status: sweet dark open!";
+let shopTagsText = "jirai kei / ribbon / cute";
+
+// Admin Password State
+let adminPasswordStore = "admin123";
+
+// Dynamic Contact Us Links State Array
+let contactLinks = [
+  { id: 1, platform: 'facebook', label: 'Facebook', url: 'https://facebook.com', icon: 'fa-brands fa-facebook-f' },
+  { id: 2, platform: 'line', label: 'Line', url: 'https://line.me', icon: 'fa-brands fa-line' },
+  { id: 3, platform: 'instagram', label: 'Instagram', url: 'https://instagram.com', icon: 'fa-brands fa-instagram' },
+  { id: 4, platform: 'tiktok', label: 'TikTok', url: 'https://tiktok.com', icon: 'fa-brands fa-tiktok' }
+];
+
+// Platform metadata dictionary
+const platformMeta = {
+  facebook: { label: 'Facebook', icon: 'fa-brands fa-facebook-f' },
+  line: { label: 'Line', icon: 'fa-brands fa-line' },
+  instagram: { label: 'Instagram', icon: 'fa-brands fa-instagram' },
+  tiktok: { label: 'TikTok', icon: 'fa-brands fa-tiktok' },
+  twitter: { label: 'X (Twitter)', icon: 'fa-brands fa-x-twitter' },
+  shopee: { label: 'Shopee', icon: 'fa-solid fa-bag-shopping' },
+  lazada: { label: 'Lazada', icon: 'fa-solid fa-store' },
+  youtube: { label: 'YouTube', icon: 'fa-brands fa-youtube' },
+  phone: { label: 'Phone', icon: 'fa-solid fa-phone' },
+  email: { label: 'Email', icon: 'fa-solid fa-envelope' },
+  telegram: { label: 'Telegram', icon: 'fa-brands fa-telegram' },
+  discord: { label: 'Discord', icon: 'fa-brands fa-discord' },
+  other: { label: 'Link', icon: 'fa-solid fa-link' }
+};
+
+let reviews = [
+  {
+    id: 1,
+    name: "คุณลูกค้าน่ารัก A",
+    date: "10/11/2568",
+    rating: 5,
+    content: "สินค้าน่ารักมาก จัดส่งไว",
+    status: "approved"
+  },
+  {
+    id: 2,
+    name: "คุณลูกค้าน่ารัก B",
+    date: "08/11/2568",
+    rating: 5,
+    content: "ของเอามาดี ราคาดี น่ารักมากค่ะ",
+    status: "approved"
+  },
+  {
+    id: 3,
+    name: "คุณลูกค้าน่ารัก C",
+    date: "05/11/2568",
+    rating: 4,
+    content: "แพ็คของมาเรียบร้อยแน่นหนามากๆ ไว้จะอุดหนุนอีกแน่นอนค่ะ",
+    status: "approved"
+  }
+];
+
+let selectedRating = 5;
+
+// Initialize UI on Load
+window.onload = function() {
+  renderPublicReviews();
+  renderAdminReviews();
+  renderAdminBannerControls();
+  renderContactLinksUI();
+  initAdminShopInfoInputs();
+  updateStats();
+  initFallingCrosses();
+};
+
+// SHOP DETAILS MANAGEMENT
+function initAdminShopInfoInputs() {
+  document.getElementById('adminDescInput').value = shopDesc;
+  document.getElementById('adminStatusInput').value = shopStatusText;
+  document.getElementById('adminTagsInput').value = shopTagsText;
+}
+
+function updateShopInfoFromAdmin() {
+  const desc = document.getElementById('adminDescInput').value.trim();
+  const status = document.getElementById('adminStatusInput').value.trim();
+  const tags = document.getElementById('adminTagsInput').value.trim();
+
+  if (desc) {
+    shopDesc = desc;
+    document.getElementById('shopDescriptionText').innerText = shopDesc;
+  }
+  if (status) {
+    shopStatusText = status;
+    document.getElementById('shopStatusBadge').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#f49ac1] inline-block mr-1.5 animate-pulse"></span> ${escapeHtml(shopStatusText)}`;
+  }
+  if (tags) {
+    shopTagsText = tags;
+    document.getElementById('shopTagsBadge').innerText = shopTagsText;
+  }
+
+  showToast('อัปเดตข้อมูลร้านค้าเรียบร้อยแล้ว ♡');
+}
+
+// ADMIN PASSWORD MANAGEMENT
+function handleChangeAdminPassword() {
+  const currentPass = document.getElementById('adminCurrentPass').value;
+  const newPass = document.getElementById('adminNewPass').value;
+  const confirmPass = document.getElementById('adminConfirmPass').value;
+
+  if (!currentPass || !newPass || !confirmPass) {
+    showToast('กรุณากรอกข้อมูลรหัสผ่านให้ครบทุกช่อง');
+    return;
+  }
+  if (currentPass !== adminPasswordStore) {
+    showToast('รหัสผ่านปัจจุบันไม่ถูกต้อง');
+    return;
+  }
+  if (newPass !== confirmPass) {
+    showToast('รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน');
+    return;
+  }
+  if (newPass.length < 4) {
+    showToast('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+    return;
+  }
+
+  adminPasswordStore = newPass;
+  document.getElementById('adminCurrentPass').value = '';
+  document.getElementById('adminNewPass').value = '';
+  document.getElementById('adminConfirmPass').value = '';
+  showToast('เปลี่ยนรหัสผ่านแอดมินสำเร็จแล้ว! ♡');
+}
+
+// DYNAMIC CONTACT LINKS MANAGEMENT
+function renderContactLinksUI() {
+  // 1. Render Front-end Customer Icons
+  const custContainer = document.getElementById('custContactContainer');
+  if (contactLinks.length === 0) {
+    custContainer.innerHTML = `<span class="text-[10px] text-[#6e525d] font-cute">- ไม่มีช่องทางติดต่อ -</span>`;
+  } else {
+    custContainer.innerHTML = contactLinks.map(item => `
+      <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener"
+         class="w-6 h-6 rounded-full bg-[#1c191a] border border-[#1c191a] hover:bg-[#d95b96] flex items-center justify-center text-[#ffe6f0] hover:text-white transition text-[11px] shadow-xs"
+         title="${escapeHtml(item.label)}">
+        <i class="${item.icon}"></i>
+      </a>
+    `).join('');
+  }
+
+  // 2. Render Admin Panel Rows
+  const adminContainer = document.getElementById('adminContactList');
+  if (contactLinks.length === 0) {
+    adminContainer.innerHTML = `<div class="text-[11px] text-[#6e525d] text-center py-2">ยังไม่มีช่องทางติดต่อในระบบ</div>`;
+  } else {
+    adminContainer.innerHTML = contactLinks.map(item => `
+      <div class="flex items-center space-x-2 bg-[#fff6f9] p-2 rounded-lg border border-[#1c191a]">
+        <span class="w-24 text-[11px] font-cute font-bold text-[#1c191a] flex items-center space-x-1.5 truncate">
+          <i class="${item.icon} text-[#d95b96] w-4"></i>
+          <span class="truncate">${escapeHtml(item.label)}</span>
+        </span>
+        <input type="text" value="${escapeHtml(item.url)}" onchange="updateContactUrl(${item.id}, this.value)"
+          placeholder="ลิงก์ติดต่อ..."
+          class="flex-1 bg-white border border-[#1c191a] rounded-lg p-1.5 text-xs text-[#1c191a] focus:outline-none">
+        <button onclick="removeContactChannel(${item.id})" class="px-2.5 py-1.5 bg-[#1c191a] hover:bg-red-700 text-[#ffe6f0] rounded-lg text-xs transition">
+          <i class="fa-solid fa-trash text-[10px]"></i>
+        </button>
+      </div>
+    `).join('');
+  }
+}
+
+function updateContactUrl(id, newUrl) {
+  const item = contactLinks.find(c => c.id === id);
+  if (item) {
+    item.url = newUrl.trim() || '#';
+    renderContactLinksUI();
+    showToast(`อัปเดตลิงก์ ${item.label} เรียบร้อยแล้ว`);
+  }
+}
+
+function addContactChannel() {
+  const platformKey = document.getElementById('newContactPlatform').value;
+  const urlInput = document.getElementById('newContactUrl').value.trim();
+
+  if (!urlInput) {
+    showToast('กรุณากรอกลิงก์ หรือข้อมูลช่องทางติดต่อ');
+    return;
+  }
+
+  const meta = platformMeta[platformKey] || platformMeta['other'];
+  const newChannel = {
+    id: Date.now(),
+    platform: platformKey,
+    label: meta.label,
+    url: urlInput,
+    icon: meta.icon
+  };
+
+  contactLinks.push(newChannel);
+  document.getElementById('newContactUrl').value = '';
+  renderContactLinksUI();
+  showToast(`เพิ่มช่องทาง ${meta.label} เรียบร้อยแล้ว ♡`);
+}
+
+function removeContactChannel(id) {
+  contactLinks = contactLinks.filter(c => c.id !== id);
+  renderContactLinksUI();
+  showToast('ลบช่องทางติดต่อเรียบร้อยแล้ว');
+}
+
+// ADMIN IMAGE MANAGEMENT FUNCTIONS
+function handleLogoFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const imgDataUrl = e.target.result;
+    const avatarContainer = document.querySelector('.animate-jirai-float');
+    avatarContainer.innerHTML = `<img src="${imgDataUrl}" class="w-full h-full object-cover" />`;
+    showToast('อัปเดตรูปโลโก้จากไฟล์เรียบร้อย ♡');
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleBannerFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    bannerUrl = e.target.result;
+    renderAdminBannerControls();
+    showToast('อัปเดตรูปแบรนเนอร์จากไฟล์เรียบร้อย ♡');
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateLogoFromAdmin() {
+  const url = document.getElementById('adminLogoInput').value.trim();
+  const avatarContainer = document.querySelector('.animate-jirai-float');
+
+  if (!url) {
+    showToast('กรุณากรอก URL รูปภาพโลโก้');
+    return;
+  }
+
+  avatarContainer.innerHTML = `<img src="${escapeHtml(url)}" class="w-full h-full object-cover" onerror="this.onerror=null; alert('ไม่สามารถโหลดรูปโลโก้นี้ได้');" />`;
+  showToast('อัปเดตรูปโลโก้ร้านค้าเรียบร้อย ♡');
+}
+
+function renderAdminBannerControls() {
+  const container = document.getElementById('adminBannerControl');
+  const bannerContainer = document.getElementById('bannerContainer');
+  const bannerImg = document.getElementById('shopBannerImg');
+
+  if (bannerUrl) {
+    bannerContainer.classList.remove('hidden');
+    bannerImg.src = bannerUrl;
+    container.innerHTML = `
+      <div class="space-y-2">
+        <label class="w-full flex items-center justify-center space-x-2 bg-[#fce7f0] hover:bg-[#fad4e4] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] font-bold cursor-pointer transition">
+          <i class="fa-solid fa-upload"></i>
+          <span>อัปโหลดแบรนเนอร์ใหม่จากเครื่อง</span>
+          <input type="file" id="adminBannerFileInput" accept="image/*" onchange="handleBannerFileUpload(event)" class="hidden">
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="adminBannerInput" value="${bannerUrl.startsWith('data:') ? 'รูปอัปโหลดจากไฟล์ในเครื่อง' : escapeHtml(bannerUrl)}" placeholder="หรือวาง URL รูปแบรนเนอร์..."
+            class="w-full bg-[#fff6f9] border border-[#1c191a] rounded-lg p-2 text-xs text-[#1c191a] focus:outline-none">
+          <button onclick="updateBannerUrlFromInput()" class="jirai-btn-black text-xs px-3 py-1.5 rounded-lg font-cute whitespace-nowrap">แก้ไข</button>
+        </div>
+        <button onclick="removeBanner()" class="w-full px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white border border-[#1c191a] rounded-lg text-xs font-cute font-bold transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-trash text-[10px]"></i>
+          <span>ลบรูปแบรนเนอร์ออก</span>
+        </button>
+      </div>
+    `;
+  } else {
+    bannerContainer.classList.add('hidden');
+    container.innerHTML = `
+      <div class="space-y-2">
+        <label class="w-full flex items-center justify-center space-x-2 bg-[#fce7f0] hover:bg-[#fad4e4] text-[#1c191a] border border-[#1c191a] rounded-lg p-2.5 text-xs font-cute font-bold cursor-pointer transition">
+          <i class="fa-solid fa-upload text-[10px]"></i>
+          <span>+ อัปโหลดรูปแบรนเนอร์จากเครื่อง</span>
+          <input type="file" id="adminBannerFileInput" accept="image/*" onchange="handleBannerFileUpload(event)" class="hidden">
+        </label>
+      </div>
+    `;
+  }
+}
+
+function updateBannerUrlFromInput() {
+  const inputVal = document.getElementById('adminBannerInput').value.trim();
+  if (!inputVal) {
+    removeBanner();
+    return;
+  }
+  bannerUrl = inputVal;
+  renderAdminBannerControls();
+  showToast('อัปเดตรูปแบรนเนอร์เรียบร้อย ♡');
+}
+
+function removeBanner() {
+  bannerUrl = null;
+  renderAdminBannerControls();
+  showToast('ลบรูปแบรนเนอร์ออกจากหน้าลูกค้าเรียบร้อย');
+}
+
+function initFallingCrosses() {
+  const symbols = ['♡', '🖤', '🎀', '✕', '୨୧', '✦'];
+  const containerCount = 16;
+
+  for (let i = 0; i < containerCount; i++) {
+    const cross = document.createElement('div');
+    cross.className = 'falling-cross font-cinzel';
+    cross.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    cross.style.left = `${Math.random() * 98}vw`;
+    cross.style.animationDuration = `${9 + Math.random() * 10}s`;
+    cross.style.animationDelay = `${Math.random() * 10}s`;
+    cross.style.fontSize = `${12 + Math.random() * 10}px`;
+    cross.style.opacity = `${0.2 + Math.random() * 0.35}`;
+    document.body.appendChild(cross);
+  }
+}
+
+function renderPublicReviews() {
+  const listContainer = document.getElementById('publicReviewList');
+  const visibleReviews = reviews.filter(r => r.status === 'approved');
+
+  if (visibleReviews.length === 0) {
+    listContainer.innerHTML = `
+      <div class="p-8 text-center text-[#6e525d] text-xs font-cute">
+        ୨୧ ยังไม่มีรีวิวในขณะนี้ ୨୧
+      </div>
+    `;
+    return;
+  }
+
+  listContainer.innerHTML = visibleReviews.map(r => `
+    <div class="bg-white border-2 border-[#1c191a] rounded-2xl p-3.5 sm:p-4 shadow-[3px_3px_0px_#f49ac1] hover:translate-y-[-1px] transition duration-200">
+      <div class="flex items-center justify-between mb-1.5">
+        <div class="flex items-center space-x-2">
+          <span class="w-6 h-6 rounded-full bg-[#1c191a] text-[#f8c8dc] text-[10px] flex items-center justify-center font-bold">♡</span>
+          <span class="font-bold text-xs sm:text-sm text-[#1c191a] font-cute">${escapeHtml(r.name)}</span>
+        </div>
+        <span class="text-[10px] sm:text-[11px] text-[#6e525d] font-cinzel font-semibold">${r.date}</span>
+      </div>
+      <div class="flex items-center space-x-1 text-[#d95b96] text-[11px] mb-2 pl-8">
+        ${generateStarsHtml(r.rating)}
+      </div>
+      <div class="ml-8 text-xs sm:text-sm text-[#1c191a] font-normal leading-relaxed bg-[#fff5f8] p-3 rounded-xl border border-dashed border-[#1c191a]/50">
+        ${escapeHtml(r.content)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAdminReviews() {
+  const adminContainer = document.getElementById('adminReviewList');
+
+  if (reviews.length === 0) {
+    adminContainer.innerHTML = `<div class="text-center py-6 text-[#6e525d] text-xs">ไม่มีรีวิวในระบบ</div>`;
+    return;
+  }
+
+  adminContainer.innerHTML = reviews.map(r => {
+    let statusBadge = '';
+    if (r.status === 'approved') {
+      statusBadge = `<span class="bg-emerald-100 text-emerald-800 border border-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full">อนุมัติแล้ว</span>`;
+    } else if (r.status === 'pending') {
+      statusBadge = `<span class="bg-amber-100 text-amber-800 border border-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full">รออนุมัติ</span>`;
+    } else if (r.status === 'hidden') {
+      statusBadge = `<span class="bg-stone-200 text-stone-700 border border-stone-600 text-[10px] font-bold px-2 py-0.5 rounded-full">ซ่อนอยู่</span>`;
+    }
+
+    return `
+      <div class="bg-white border-2 border-[#1c191a] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="space-y-1">
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-bold text-[#1c191a] font-cute">${escapeHtml(r.name)}</span>
+            ${statusBadge}
+            <span class="text-[10px] text-[#6e525d]">(${r.date})</span>
+          </div>
+          <div class="flex items-center space-x-1 text-[#d95b96] text-xs">
+            ${generateStarsHtml(r.rating)}
+          </div>
+          <p class="text-xs text-[#1c191a] mt-1">${escapeHtml(r.content)}</p>
+        </div>
+
+        <div class="flex items-center space-x-1.5 self-end sm:self-center">
+          ${r.status !== 'approved' ? `
+            <button onclick="changeReviewStatus(${r.id}, 'approved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white border border-[#1c191a] rounded-lg text-xs font-cute font-bold transition">
+              <i class="fa-solid fa-check text-[10px] mr-1"></i>อนุมัติ
+            </button>
+          ` : ''}
+          ${r.status !== 'hidden' ? `
+            <button onclick="changeReviewStatus(${r.id}, 'hidden')" class="px-2.5 py-1 bg-[#fce7f0] hover:bg-[#fad4e4] text-[#1c191a] border border-[#1c191a] rounded-lg text-xs font-cute font-bold transition">
+              <i class="fa-solid fa-eye-slash text-[10px] mr-1"></i>ซ่อน
+            </button>
+          ` : `
+            <button onclick="changeReviewStatus(${r.id}, 'approved')" class="px-2.5 py-1 bg-[#fce7f0] hover:bg-[#fad4e4] text-[#1c191a] border border-[#1c191a] rounded-lg text-xs font-cute font-bold transition">
+              <i class="fa-solid fa-eye text-[10px] mr-1"></i>เลิกซ่อน
+            </button>
+          `}
+          <button onclick="deleteReview(${r.id})" class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white border border-[#1c191a] rounded-lg text-xs font-cute font-bold transition">
+            <i class="fa-solid fa-trash text-[10px] mr-1"></i>ลบ
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function handleCustomerSubmitReview(e) {
+  e.preventDefault();
+  const name = document.getElementById('custName').value.trim();
+  const content = document.getElementById('custContent').value.trim();
+  if (!name || !content) return;
+
+  const today = new Date();
+  const dateStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear() + 543}`;
+
+  const newReview = {
+    id: Date.now(),
+    name: name,
+    date: dateStr,
+    rating: selectedRating,
+    content: content,
+    status: 'pending'
+  };
+
+  reviews.unshift(newReview);
+  document.getElementById('custName').value = '';
+  document.getElementById('custContent').value = '';
+  toggleReviewModal(false);
+  renderAdminReviews();
+  updateStats();
+  showToast('ส่งรีวิวเรียบร้อยแล้ว! (รอแอดมินอนุมัติเพื่อแสดงผล) ♡');
+}
+
+function changeReviewStatus(id, newStatus) {
+  const r = reviews.find(item => item.id === id);
+  if (r) {
+    r.status = newStatus;
+    renderPublicReviews();
+    renderAdminReviews();
+    updateStats();
+    showToast(`อัปเดตสถานะเป็น: ${newStatus === 'approved' ? 'อนุมัติแล้ว' : 'ซ่อนแล้ว'}`);
+  }
+}
+
+function deleteReview(id) {
+  reviews = reviews.filter(item => item.id !== id);
+  renderPublicReviews();
+  renderAdminReviews();
+  updateStats();
+  showToast('ลบรีวิวออกจากระบบแล้ว');
+}
+
+function setRating(rating) {
+  selectedRating = rating;
+  const stars = document.querySelectorAll('#starRatingPicker i');
+  stars.forEach((star, index) => {
+    if (index < rating) {
+      star.classList.remove('text-stone-300');
+      star.classList.add('text-[#d95b96]');
+    } else {
+      star.classList.remove('text-[#d95b96]');
+      star.classList.add('text-stone-300');
+    }
+  });
+}
+
+function updateStats() {
+  const approved = reviews.filter(r => r.status === 'approved');
+  const totalCount = approved.length;
+
+  document.getElementById('totalReviewsCount').innerHTML = `จาก <strong class="text-[#1c191a] font-bold">${totalCount}</strong> รีวิวทั้งหมด`;
+
+  if (totalCount === 0) {
+    document.getElementById('avgRatingScore').innerText = '0.0';
+    return;
+  }
+
+  const avg = (approved.reduce((acc, curr) => acc + curr.rating, 0) / totalCount).toFixed(1);
+  document.getElementById('avgRatingScore').innerText = avg;
+
+  const avgNum = parseFloat(avg);
+  let starsHtml = '';
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(avgNum)) {
+      starsHtml += `<i class="fa-solid fa-star text-[#d95b96]"></i>`;
+    } else if (i - 0.5 <= avgNum) {
+      starsHtml += `<i class="fa-solid fa-star-half-stroke text-[#d95b96]"></i>`;
+    } else {
+      starsHtml += `<i class="fa-regular fa-star text-stone-300"></i>`;
+    }
+  }
+  document.getElementById('avgStars').innerHTML = starsHtml;
+}
+
+function generateStarsHtml(rating) {
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      html += `<i class="fa-solid fa-star"></i>`;
+    } else {
+      html += `<i class="fa-regular fa-star text-stone-300"></i>`;
+    }
+  }
+  return html;
+}
+
+function toggleReviewModal(show) {
+  document.getElementById('reviewModal').classList.toggle('hidden', !show);
+  if (show) setRating(5);
+}
+
+function toggleAdminModal(show) {
+  document.getElementById('adminModal').classList.toggle('hidden', !show);
+}
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-5 right-5 bg-[#1c191a] text-[#ffe6f0] border-2 border-[#f49ac1] px-4 py-3 rounded-full shadow-xl z-50 text-xs font-cute font-bold animate-bounce';
+  toast.innerText = `🎀 ${message}`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+</script>
+</body>
+</html>
